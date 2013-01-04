@@ -11,10 +11,14 @@ load:
   - app/js/models/questionModel.js
   - app/js/models/userModel.js
   - app/js/models/quizModel.js
+  - app/js/models/localizationModel.js
 
   - app/js/components/components.js
   - app/js/controllers/homeCtrl.js
   - app/js/controllers/quizCtrl.js
+  - app/js/controllers/resultCtrl.js
+  - app/js/controllers/helpCtrl.js
+  - app/js/controllers/localizationCtrl.js
 
 
 test:

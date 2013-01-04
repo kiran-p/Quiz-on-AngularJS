@@ -88,5 +88,101 @@ describe('App controllers', function () {
 
     });
 
+    describe('ResultController', function () {
+        var scope, ctrl;
+
+        beforeEach(inject(function ($rootScope,$controller, $location) {
+            scope = $rootScope.$new();
+            ctrl = $controller('ResultCtrl', {$scope: scope});
+        }));
+
+        it('Quiz size to be 0 on new game', function () {
+            scope.quizSize;
+            scope.newGame();
+            expect(scope.quizSize).toBe(0);
+        });
+        it('Quiz size to be 0 on play again', function () {
+            scope.newGame();
+            expect(scope.quizSize).toBe(0);
+        });
+
+    });
+
+    describe('HelpController', function () {
+        var scope, ctrl, $httpMock;
+
+        beforeEach(inject(function ($httpBackend, $rootScope, $controller) {
+            $httpMock = $httpBackend;
+            $httpMock.expectGET('fixtures/questions.json').
+                respond({
+                    "title": "Test Quiz",
+                    "questions": [
+                        {
+                            "question": "Two ducks and two dogs have a total of fourteen legs.",
+                            "answers": [
+                                "true", "false"
+                            ],
+                            "weight": 2,
+                            "type": "radio",
+                            "correctAnswer": "false"
+                        },
+                        {
+                            "question": "Which number should come next in the series? 53, 53, 40, 40, 27, 27",
+                            "answers": [
+                                12, 14, 27, 53
+                            ],
+                            "weight": 2,
+                            "type": "radio",
+                            "correctAnswer": "14"
+                        }
+                    ] ,
+                     "durationPerQuestion": 20,
+                });
+
+            scope = $rootScope.$new();
+            ctrl = $controller('HelpCtrl', {$scope: scope});
+        }));
+
+        it('help view should have quizSize and duration', function () {
+            $httpMock.flush();
+            expect(scope.quizSize).toBe(2);
+            expect(scope.duration).toBe(20);
+        });
+    })
+    describe('localization Controller', function () {
+            var scope, ctrl, $httpMock;
+
+            beforeEach(inject(function ($httpBackend, $rootScope, $controller) {
+                $httpMock = $httpBackend;
+                $httpMock.expectGET('fixtures/languages.json').
+                    respond({
+                                "options": [
+                                    {
+                                        "id": "en",
+                                        "label": "English (International)"
+                                    },
+                                    {
+                                        "id": "de",
+                                        "label": "German"
+                                    }
+                                ]
+                            } );
+
+                scope = $rootScope.$new();
+                ctrl = $controller('AppCtrl', {$scope: scope});
+            }));
+
+            it('help view should have quizSize and duration', function () {
+                $httpMock.flush();
+                scope.selected = 'en';
+                scope.changeLanguage('de');
+                expect(scope.selected).toBe('de');
+                expect(scope.languages[0].id).toBe('en');
+                expect(scope.languages[1].id).toBe('de');
+            });
+        })
+
+
+
 });
 
